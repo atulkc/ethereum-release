@@ -1,0 +1,5 @@
+check process geth
+  with pidfile /var/vcap/sys/run/geth/geth.pid
+  start program "/var/vcap/jobs/geth/bin/geth_ctl start"
+  stop program "/var/vcap/jobs/geth/bin/geth_ctl stop"
+  group vcap

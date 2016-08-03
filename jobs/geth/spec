@@ -1,0 +1,25 @@
+---
+name: geth
+
+templates:
+  geth_ctl.erb: bin/geth_ctl
+packages:
+  - geth
+  - utils
+
+properties:
+  geth.network_id:
+    description: "Network ID"
+    default: "314589"
+
+  geth.miner.enable:
+    description: "Should this node perform mining"
+    default: true
+
+  geth.miner.threads:
+    description: "Number of threads for mining"
+    default: 4
+
+  geth.miner.etherbase:
+    description: "Account to which mining rewards are to be credited"
+    default: "0x1dd8b8105c4b8fae5d87b1c307a0e1ea8581aceb"

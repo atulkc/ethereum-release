@@ -1,0 +1,46 @@
+#!/bin/bash -e
+
+RUN_DIR=/var/vcap/sys/run/geth
+LOG_DIR=/var/vcap/sys/log/geth
+DATA_DIR=/var/vcap/store/geth
+CONF_DIR=/var/vcap/jobs/geth/config
+PIDFILE=$RUN_DIR/geth.pid
+
+source /var/vcap/packages/utils/pid_utils.sh
+
+<% if p("geth.miner.enable") %>
+  miner_flags=" \
+   --mine \
+   --minerthreads=<%= p("geth.miner.threads") %>
+   --etherbase=<%= p("geth.miner.etherbase") %>"
+<% else %>
+  miner_flags=""
+<% end %>
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE "geth"
+
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+    mkdir -p $DATA_DIR
+
+    tee_output_to_sys_log "${LOG_DIR}"
+
+    echo $$ > /var/vcap/sys/run/geth/geth.pid
+
+    exec /var/vcap/packages/geth/bin/geth ${miner_flags} --networkid="<%= p("geth.network_id") %>" --datadir="${DATA_DIR}" --rpc
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+
+    ;;
+
+  *)
+    echo "Usage: geth_ctl {start|stop}"
+
+    ;;
+
+esac
