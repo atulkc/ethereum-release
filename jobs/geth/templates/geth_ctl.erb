@@ -30,7 +30,7 @@ case $1 in
 
     echo $$ > /var/vcap/sys/run/geth/geth.pid
 
-    exec /var/vcap/packages/geth/bin/geth ${miner_flags} --networkid="<%= p("geth.network_id") %>" --datadir="${DATA_DIR}" --rpc
+    exec /var/vcap/packages/geth/bin/geth ${miner_flags} --networkid="<%= p("geth.network_id") %>" --datadir="${DATA_DIR}" --rpc --rpcaddr="<%= spec.address %>"
     ;;
 
   stop)
